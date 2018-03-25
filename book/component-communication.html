@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue Practice - Component Communication</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- App Component의 message가 
+      Child Component의 data에 바인딩됨 -->
+    <child-component v-bind:data="message" v-on:show-log="log"></child-component>
+    <child-component-two></child-component-two>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js"></script>
+  <script>
+    var eventBus = new Vue();
+
+    Vue.component('child-component', {
+      props: ['data'],
+      template: '<div> <button v-on:click="showLog">Show Log!</button> <p>{{ data }}</p> </div>',
+      methods: {
+        showLog: function () {
+          this.$emit('show-log');
+          eventBus.$emit('event-bus-trigger', 100);
+        }
+      }
+    });
+
+    Vue.component('child-component-two', {
+      template: '<div></div>',
+      created: function() {
+        eventBus.$on('event-bus-trigger', function(value) {
+          console.log("Receive event: " + value);
+        });
+      }
+    });
+
+    new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue! passed from Parent Component'
+      },
+      methods: {
+        log: function () {
+          console.log("Event from child-component");
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

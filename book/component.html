@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue Practice - Component</title>
+</head>
+<body>
+  <div id="app">
+    <button>컴포넌트 등록</button>
+    <global-component></global-component>
+    <local-component></local-component>
+  </div>
+  
+  <div id="app2">
+      <button>컴포넌트 등록</button>
+      <global-component></global-component>
+      <!-- It yields an error, because local-component is not registered in app2 instance. -->
+      <local-component></local-component>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js"></script>
+  <script>
+    // Global Component
+    Vue.component('global-component', {
+      template: '<div>Global component is registered!</div>'
+    });
+
+
+    // Local Component
+    var cmp = {
+      template: '<div>Local component is registered!</div>'
+    };
+
+    new Vue({
+      el: '#app',
+      components: {
+        'local-component': cmp
+      }
+    });
+
+    new Vue({
+      el: '#app2'
+    });
+  </script>
+</body>
+</html>
